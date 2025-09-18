@@ -1,5 +1,6 @@
 package com.wedding.invite.controller;
 
+import com.wedding.invite.service.BlessingService;
 import com.wedding.invite.service.RichMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +11,7 @@ public class RichMenuController {
 
     @Autowired
     private RichMenuService richMenuService;
+    private BlessingService blessingService;
 
     @PostMapping("/create")
     public String createRichMenu() {
