@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-
-
 @Service
 public class LineReplyService {
 
@@ -36,8 +34,9 @@ public class LineReplyService {
         Map<String, Object> quickReply = Map.of(
             "items", List.of(
                 Map.of("type", "action", "action", Map.of("type", "message", "label", "地點", "text", "地點")),
+                Map.of("type", "action", "action", Map.of("type", "message", "label", "時間", "text", "時間")), // 新增時間選項
                 Map.of("type", "action", "action", Map.of("type", "message", "label", "報名", "text", "報名")),
-                Map.of("type", "action", "action", Map.of("type", "message", "label", "祝福", "text", "祝福"))
+                Map.of("type", "action", "action", Map.of("type", "message", "label", "祝福牆", "text", "祝福牆")) // 新增祝福牆選項
             )
         );
 
@@ -57,17 +56,16 @@ public class LineReplyService {
 
     // 3️⃣ Flex Message：祝福牆展示
     public void replyWithBlessingFlex(String replyToken, List<Blessing> blessings) throws Exception {
-    	List<Map<String, Object>> contents = blessings.stream()
-    		    .limit(5)
-    		    .map(b -> {
-    		        Map<String, Object> item = new HashMap<>();
-    		        item.put("type", "text");
-    		        item.put("text", "來自 " + b.getName() + "： " + b.getMessage());
-    		        item.put("wrap", true);
-    		        return item;
-    		    })
-    		    .collect(Collectors.toList());
-
+        List<Map<String, Object>> contents = blessings.stream()
+            .limit(5)
+            .map(b -> {
+                Map<String, Object> item = new HashMap<>();
+                item.put("type", "text");
+                item.put("text", "來自 " + b.getName() + "： " + b.getMessage());
+                item.put("wrap", true);
+                return item;
+            })
+            .collect(Collectors.toList());
 
         Map<String, Object> bubble = Map.of(
             "type", "bubble",
@@ -105,7 +103,7 @@ public class LineReplyService {
 
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
-                throw new RuntimeException("LINE API 回覆失敗：" + response.code());
+                throw new RuntimeException("LINE API 回覆失敗：" + response.code() + ", Body: " + response.body().string());
             }
             System.out.println("LINE 回覆成功：" + response.body().string());
         }

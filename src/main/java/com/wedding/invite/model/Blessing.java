@@ -1,5 +1,7 @@
 package com.wedding.invite.model;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -12,7 +14,10 @@ public class Blessing {
     private String name;
     private String message;
 
-    public Long getId() { return id; }
+    public Blessing(String userId, String userName, String message2, LocalDateTime now) {
+		// TODO Auto-generated constructor stub
+	}
+	public Long getId() { return id; }
     public String getName() { return name; }
     public String getMessage() { return message; }
 
