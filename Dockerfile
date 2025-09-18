@@ -4,6 +4,6 @@ WORKDIR /app
 
 COPY . .
 
-RUN ./mvnw clean package
+RUN mvn clean package
 
 CMD ["java", "-jar", "target/line-wedding-bot-0.0.1-SNAPSHOT.jar"]
