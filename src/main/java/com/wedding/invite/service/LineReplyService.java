@@ -6,8 +6,12 @@ import okhttp3.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
+
 
 @Service
 public class LineReplyService {
@@ -53,10 +57,17 @@ public class LineReplyService {
 
     // 3️⃣ Flex Message：祝福牆展示
     public void replyWithBlessingFlex(String replyToken, List<Blessing> blessings) throws Exception {
-        List<Map<String, Object>> contents = blessings.stream()
-            .limit(5)
-            .map(b -> Map.of("type", "text", "text", "來自 " + b.getName() + "： " + b.getMessage(), "wrap", true))
-            .toList();
+    	List<Map<String, Object>> contents = blessings.stream()
+    		    .limit(5)
+    		    .map(b -> {
+    		        Map<String, Object> item = new HashMap<>();
+    		        item.put("type", "text");
+    		        item.put("text", "來自 " + b.getName() + "： " + b.getMessage());
+    		        item.put("wrap", true);
+    		        return item;
+    		    })
+    		    .collect(Collectors.toList());
+
 
         Map<String, Object> bubble = Map.of(
             "type", "bubble",
