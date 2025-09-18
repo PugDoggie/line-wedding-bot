@@ -45,7 +45,7 @@ public class LineWebhookController {
                     } else if ("時間".equals(messageText)) {
                         replyService.replyToUser(replyToken, "婚禮時間：2025年10月25日 中午12點30分 ⏰");
                     } else if ("報名".equals(messageText)) {
-                        replyService.replyToUser(replyToken, "報名連結：https://yourdomain.com/rsvp 📝");
+                        replyService.replyToUser(replyToken, "報名連結：https://forms.gle/ZtYcJVXMaLq7tPXn9 📝");
                     } else if (messageText.startsWith("祝福:")) { // 判斷是否為祝福留言，例如 "祝福:新婚快樂！"
                         String blessingMessage = messageText.substring(3).trim();
                         // 儲存祝福留言
