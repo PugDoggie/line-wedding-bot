@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/webhook")
+@RequestMapping("/callback")
 public class LineWebhookController {
 
     private static final Logger logger = LoggerFactory.getLogger(LineWebhookController.class);
