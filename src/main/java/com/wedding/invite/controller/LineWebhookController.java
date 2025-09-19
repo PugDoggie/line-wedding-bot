@@ -21,6 +21,9 @@ public class LineWebhookController {
     private final BlessingService blessingService;
     private final LineReplyService lineReplyService;
 
+    // ✅ 管理者 LINE 使用者 ID（請替換成你自己的）
+    private static final String ADMIN_USER_ID = "davidlin";
+
     @Autowired
     public LineWebhookController(BlessingService blessingService, LineReplyService lineReplyService) {
         this.blessingService = blessingService;
@@ -66,6 +69,14 @@ public class LineWebhookController {
                                 lineReplyService.replyToUser(replyToken, "目前還沒有祝福留言，快來成為第一位吧！🎉");
                             } else {
                                 lineReplyService.replyWithBlessingFlex(replyToken, blessings);
+                            }
+                            break;
+                        case "清除祝福":
+                            if (ADMIN_USER_ID.equals(userId)) {
+                                blessingService.clearBlessings(); // ✅ 執行清除
+                                lineReplyService.replyToUser(replyToken, "祝福牆已清空 🧹");
+                            } else {
+                                lineReplyService.replyToUser(replyToken, "您沒有權限執行此操作 🚫");
                             }
                             break;
                         default:
