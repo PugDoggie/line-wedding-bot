@@ -19,6 +19,7 @@ public class RichMenuService {
     public void createMenu() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
 
+     // 修改 "action" 為 type: "message" 而非 "uri"
         Map<String, Object> payload = Map.of(
             "size", Map.of("width", 2500, "height", 843),
             "selected", true,
@@ -26,13 +27,13 @@ public class RichMenuService {
             "chatBarText", "婚禮選單",
             "areas", List.of(
                 Map.of("bounds", Map.of("x", 0, "y", 0, "width", 625, "height", 843),
-                       "action", Map.of("type", "uri", "uri", "https://yourdomain.com/map")),
+                       "action", Map.of("type", "message", "text", "地點")),
                 Map.of("bounds", Map.of("x", 625, "y", 0, "width", 625, "height", 843),
-                       "action", Map.of("type", "uri", "uri", "https://yourdomain.com/bless")),
+                       "action", Map.of("type", "message", "text", "祝福牆")),
                 Map.of("bounds", Map.of("x", 1250, "y", 0, "width", 625, "height", 843),
-                       "action", Map.of("type", "uri", "uri", "https://yourdomain.com/photos")),
+                       "action", Map.of("type", "message", "text", "照片")),
                 Map.of("bounds", Map.of("x", 1875, "y", 0, "width", 625, "height", 843),
-                       "action", Map.of("type", "uri", "uri", "https://yourdomain.com/video"))
+                       "action", Map.of("type", "message", "text", "影片"))
             )
         );
 
