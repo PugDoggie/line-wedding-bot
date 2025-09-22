@@ -45,14 +45,33 @@ public class LineWebhookController {
 
         for (LineEvent event : request.getEvents()) {
             String replyToken = event.getReplyToken();
-            if (replyToken == null || event.getMessage() == null || event.getSource() == null) {
-                logger.warn("事件缺少必要欄位，略過處理");
+            String eventType = event.getType();
+
+            if (event.getSource() == null) {
+                logger.warn("事件缺少使用者資訊，略過處理");
                 continue;
             }
 
             String userId = event.getSource().getUserId();
+
+            // ✅ 使用者加入好友時推送歡迎訊息
+            if (Objects.equals(eventType, "follow")) {
+                try {
+                    logger.info("使用者加入好友：{}", userId);
+                    lineReplyService.pushMessage(userId, "歡迎加入婚禮小管家 🎉 請點選下方選單開始互動！");
+                } catch (Exception e) {
+                    logger.error("歡迎訊息推送失敗：{}", e.getMessage(), e);
+                }
+                continue;
+            }
+
+            // ✅ 處理文字訊息事件
+            if (replyToken == null || event.getMessage() == null) {
+                logger.warn("事件缺少必要欄位，略過處理");
+                continue;
+            }
+
             String messageType = event.getMessage().getType();
-            String eventType = event.getType();
             String messageText = event.getMessage().getText();
 
             if (Objects.equals(eventType, "message") && Objects.equals(messageType, "text") && messageText != null) {
