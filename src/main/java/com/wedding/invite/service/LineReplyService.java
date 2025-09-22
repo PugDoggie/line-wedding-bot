@@ -138,6 +138,49 @@ public class LineReplyService {
             System.err.println("Push 處理錯誤：" + e.getMessage());
         }
     }
+ // ✅ 推送快速選單（用於 replyToken 無效時）
+    public void pushQuickReply(String userId, String messageText) {
+        try {
+            Map<String, Object> quickReply = Map.of(
+                "items", List.of(
+                    Map.of("type", "action", "action", Map.of("type", "message", "label", "地點", "text", "地點")),
+                    Map.of("type", "action", "action", Map.of("type", "message", "label", "時間", "text", "時間")),
+                    Map.of("type", "action", "action", Map.of("type", "message", "label", "報名", "text", "報名")),
+                    Map.of("type", "action", "action", Map.of("type", "message", "label", "祝福牆", "text", "祝福牆"))
+                )
+            );
+
+            Map<String, Object> message = Map.of(
+                "type", "text",
+                "text", messageText,
+                "quickReply", quickReply
+            );
+
+            Map<String, Object> payload = Map.of(
+                "to", userId,
+                "messages", List.of(message)
+            );
+
+            String json = mapper.writeValueAsString(payload);
+
+            Request request = new Request.Builder()
+                .url("https://api.line.me/v2/bot/message/push")
+                .addHeader("Authorization", "Bearer " + channelAccessToken)
+                .addHeader("Content-Type", "application/json")
+                .post(RequestBody.create(json, MediaType.get("application/json")))
+                .build();
+
+            try (Response response = client.newCall(request).execute()) {
+                if (!response.isSuccessful()) {
+                    System.err.println("Push QuickReply 失敗：" + response.body().string());
+                } else {
+                    System.out.println("Push QuickReply 成功：" + response.body().string());
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Push QuickReply 處理錯誤：" + e.getMessage());
+        }
+    }
 
     // 5️⃣ 共用方法：送出 LINE 回覆
     private void sendReply(Map<String, Object> payload) throws Exception {
