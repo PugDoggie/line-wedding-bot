@@ -114,26 +114,32 @@ public class LineWebhookController {
 
                         case "sticker":
                             lineReplyService.replyToUser(replyToken, userId, "感謝你的貼圖！我們也感受到你的祝福 🥰");
+                            lineReplyService.replyWithQuickReply(replyToken, userId, "請選擇您想查詢的項目 😊");
                             break;
 
                         case "image":
                             lineReplyService.replyToUser(replyToken, userId, "收到你的圖片了 📷 謝謝分享！");
+                            lineReplyService.replyWithQuickReply(replyToken, userId, "請選擇您想查詢的項目 😊");
                             break;
 
                         case "video":
                             lineReplyService.replyToUser(replyToken, userId, "影片已收到 🎥 祝福滿滿！");
+                            lineReplyService.replyWithQuickReply(replyToken, userId, "請選擇您想查詢的項目 😊");
                             break;
 
                         case "audio":
                             lineReplyService.replyToUser(replyToken, userId, "語音訊息已收到 🎧 謝謝你的祝福！");
+                            lineReplyService.replyWithQuickReply(replyToken, userId, "請選擇您想查詢的項目 😊");
                             break;
 
                         case "location":
                             lineReplyService.replyToUser(replyToken, userId, "收到你的位置資訊 📍 謝謝分享！");
+                            lineReplyService.replyWithQuickReply(replyToken, userId, "請選擇您想查詢的項目 😊");
                             break;
 
                         default:
                             lineReplyService.replyToUser(replyToken, userId, "收到你的訊息囉！感謝你的互動 😊");
+                            lineReplyService.replyWithQuickReply(replyToken, userId, "請選擇您想查詢的項目 😊");
                             break;
                     }
                 } catch (Exception e) {
