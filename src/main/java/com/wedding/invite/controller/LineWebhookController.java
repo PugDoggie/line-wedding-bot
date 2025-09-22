@@ -27,12 +27,21 @@ public class LineWebhookController {
         this.lineReplyService = lineReplyService;
     }
 
+    // ✅ 保活 ping endpoint
+    @GetMapping("/ping")
+    public ResponseEntity<String> ping() {
+        return ResponseEntity.ok("pong");
+    }
+
+    // ✅ webhook 接收事件
     @PostMapping
     public ResponseEntity<String> handleWebhook(@RequestBody WebhookRequest request) {
         if (request == null || request.getEvents() == null || request.getEvents().isEmpty()) {
             logger.warn("收到空的 webhook 請求");
             return ResponseEntity.badRequest().body("No events found.");
         }
+
+        logger.info("收到 LINE webhook 事件，共 {} 筆", request.getEvents().size());
 
         for (LineEvent event : request.getEvents()) {
             String replyToken = event.getReplyToken();
@@ -52,20 +61,20 @@ public class LineWebhookController {
                 try {
                     switch (messageText) {
                         case "地點":
-                            lineReplyService.replyToUser(replyToken, "婚禮地點：彰化縣員林市員林大道一段298號 💒");
+                            lineReplyService.replyToUser(replyToken, userId, "婚禮地點：彰化縣員林市員林大道一段298號 💒");
                             break;
                         case "時間":
-                            lineReplyService.replyToUser(replyToken, "婚禮時間：2025年10月25日 中午12點30分 ⏰");
+                            lineReplyService.replyToUser(replyToken, userId, "婚禮時間：2025年10月25日 中午12點30分 ⏰");
                             break;
                         case "報名":
-                            lineReplyService.replyToUser(replyToken, "報名連結：https://forms.gle/ZtYcJVXMaLq7tPXn9 📝");
+                            lineReplyService.replyToUser(replyToken, userId, "報名連結：https://forms.gle/ZtYcJVXMaLq7tPXn9 📝");
                             break;
                         case "祝福牆":
                             var blessings = blessingService.getBlessings();
                             if (blessings == null || blessings.isEmpty()) {
-                                lineReplyService.replyToUser(replyToken, "目前還沒有祝福留言，快來成為第一位吧！🎉");
+                                lineReplyService.replyToUser(replyToken, userId, "目前還沒有祝福留言，快來成為第一位吧！🎉");
                             } else {
-                                lineReplyService.replyWithBlessingFlex(replyToken, blessings);
+                                lineReplyService.replyWithBlessingFlex(replyToken, userId, blessings);
                             }
                             break;
                         default:
@@ -73,22 +82,18 @@ public class LineWebhookController {
                                 String blessingMessage = messageText.substring(3).trim();
                                 if (!blessingMessage.isEmpty()) {
                                     blessingService.saveBlessing(userId, blessingMessage);
-                                    lineReplyService.replyToUser(replyToken, "感謝您的祝福！💖 您的留言已成功記錄。");
+                                    lineReplyService.replyToUser(replyToken, userId, "感謝您的祝福！💖 您的留言已成功記錄。");
                                 } else {
-                                    lineReplyService.replyToUser(replyToken, "請輸入有效的祝福內容，例如：祝福:新婚快樂！");
+                                    lineReplyService.replyToUser(replyToken, userId, "請輸入有效的祝福內容，例如：祝福:新婚快樂！");
                                 }
                             } else {
-                                lineReplyService.replyWithQuickReply(replyToken, "歡迎來到我們的婚禮邀請頁面！請選擇您想查詢的項目 😊");
+                                lineReplyService.replyWithQuickReply(replyToken, userId, "歡迎來到我們的婚禮邀請頁面！請選擇您想查詢的項目 😊");
                             }
                             break;
                     }
                 } catch (Exception e) {
                     logger.error("處理 webhook 發生錯誤：{}", e.getMessage(), e);
-                    try {
-                        lineReplyService.replyToUser(replyToken, "發生錯誤，請稍後再試 🙏");
-                    } catch (Exception ex) {
-                        logger.error("錯誤回覆失敗：{}", ex.getMessage(), ex);
-                    }
+                    lineReplyService.pushMessage(userId, "系統發生錯誤，請稍後再試 🙏");
                 }
             }
         }
