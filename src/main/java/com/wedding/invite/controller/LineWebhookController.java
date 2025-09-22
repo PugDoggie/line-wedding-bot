@@ -56,7 +56,8 @@ public class LineWebhookController {
             if (Objects.equals(eventType, "follow")) {
                 try {
                     logger.info("使用者加入好友：{}", userId);
-                    lineReplyService.pushQuickReply(userId, "歡迎加入婚禮小管家 🎉 請選擇您想查詢的項目 😊");
+                    lineReplyService.pushQuickReply(userId,
+                        "歡迎加入婚禮小管家 🎉 請選擇您想查詢的項目 😊\n若您想留言祝福牆，請輸入：祝福:您的祝福內容\n例如：祝福:新婚快樂，永浴愛河 💖");
                 } catch (Exception e) {
                     logger.error("歡迎訊息推送失敗：{}", e.getMessage(), e);
                 }
@@ -74,25 +75,31 @@ public class LineWebhookController {
 
             if (Objects.equals(eventType, "message")) {
                 try {
+                    // ✅ 處理文字訊息
                     if ("text".equals(messageType) && messageText != null) {
                         messageText = messageText.trim();
                         switch (messageText) {
                             case "地點":
-                                lineReplyService.replyWithQuickReply(replyToken, userId, "婚禮地點：彰化縣員林市員林大道一段298號 💒");
+                                lineReplyService.replyWithQuickReply(replyToken, userId,
+                                    "婚禮地點：彰化縣員林市員林大道一段298號 💒");
                                 continue;
                             case "時間":
-                                lineReplyService.replyWithQuickReply(replyToken, userId, "婚禮時間：2025年10月25日 中午12點30分 ⏰");
+                                lineReplyService.replyWithQuickReply(replyToken, userId,
+                                    "婚禮時間：2025年10月25日 中午12點30分 ⏰");
                                 continue;
                             case "報名":
-                                lineReplyService.replyWithQuickReply(replyToken, userId, "報名連結：https://forms.gle/ZtYcJVXMaLq7tPXn9 📝");
+                                lineReplyService.replyWithQuickReply(replyToken, userId,
+                                    "報名連結：https://forms.gle/ZtYcJVXMaLq7tPXn9 📝");
                                 continue;
                             case "祝福牆":
                                 var blessings = blessingService.getBlessings();
                                 if (blessings == null || blessings.isEmpty()) {
-                                    lineReplyService.replyWithQuickReply(replyToken, userId, "目前還沒有祝福留言，快來成為第一位吧！🎉");
+                                    lineReplyService.replyWithQuickReply(replyToken, userId,
+                                        "目前還沒有祝福留言，快來成為第一位吧！🎉");
                                 } else {
                                     lineReplyService.replyWithBlessingFlex(replyToken, userId, blessings);
-                                    lineReplyService.pushQuickReply(userId, "歡迎來到我們的婚禮邀請頁面！請選擇您想查詢的項目 😊");
+                                    lineReplyService.pushQuickReply(userId,
+                                        "歡迎來到我們的婚禮邀請頁面！請選擇您想查詢的項目 😊\n若您想留言祝福牆，請輸入：祝福:您的祝福內容\n例如：祝福:新婚快樂，永浴愛河 💖");
                                 }
                                 continue;
                             default:
@@ -100,9 +107,11 @@ public class LineWebhookController {
                                     String blessingMessage = messageText.substring(3).trim();
                                     if (!blessingMessage.isEmpty()) {
                                         blessingService.saveBlessing(userId, blessingMessage);
-                                        lineReplyService.replyWithQuickReply(replyToken, userId, "感謝您的祝福！💖 您的留言已成功記錄。");
+                                        lineReplyService.replyWithQuickReply(replyToken, userId,
+                                            "感謝您的祝福！💖 您的留言已成功記錄。");
                                     } else {
-                                        lineReplyService.replyWithQuickReply(replyToken, userId, "請輸入有效的祝福內容，例如：祝福:新婚快樂！");
+                                        lineReplyService.replyWithQuickReply(replyToken, userId,
+                                            "請輸入有效的祝福內容，例如：祝福:新婚快樂！");
                                     }
                                     continue;
                                 }
@@ -110,11 +119,13 @@ public class LineWebhookController {
                     }
 
                     // ✅ 所有非文字訊息類型（貼圖、圖片、影片、語音、位置等）
-                    lineReplyService.replyWithQuickReply(replyToken, userId, "歡迎來到我們的婚禮邀請頁面！請選擇您想查詢的項目 😊");
+                    lineReplyService.replyWithQuickReply(replyToken, userId,
+                        "歡迎來到我們的婚禮邀請頁面！請選擇您想查詢的項目 😊\n若您想留言祝福牆，請輸入：祝福:您的祝福內容\n例如：祝福:新婚快樂，永浴愛河 💖");
 
                 } catch (Exception e) {
                     logger.error("處理 {} 類型訊息時發生錯誤：{}", messageType, e.getMessage(), e);
-                    lineReplyService.pushQuickReply(userId, "系統發生錯誤，請稍後再試 🙏");
+                    lineReplyService.pushQuickReply(userId,
+                        "系統發生錯誤，請稍後再試 🙏");
                 }
             }
         }
