@@ -85,7 +85,7 @@ public class LineWebhookController {
                                 continue;
                             case "時間":
                                 lineReplyService.replyWithQuickReply(replyToken, userId,
-                                    "婚禮時間：2025年10月25日 中午12點入場 12點30開席 ⏰");
+                                    "婚禮時間：2025年10月25日 \n中午12點入場 12點30開席 ⏰");
                                 continue;
                             case "報名":
                                 lineReplyService.replyWithQuickReply(replyToken, userId,
