@@ -89,7 +89,7 @@ public class LineWebhookController {
                                 continue;
                             case "報名":
                                 lineReplyService.replyWithQuickReply(replyToken, userId,
-                                    "報名連結：https://forms.gle/ZtYcJVXMaLq7tPXn9 📝");
+                                    "報名連結：https://forms.gle/ZtYcJVXMaLq7tPXn9 📝\n請大家盡速填寫方便我們做統計呦!!");
                                 continue;
                             case "祝福牆":
                                 var blessings = blessingService.getBlessings();
