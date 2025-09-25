@@ -24,6 +24,7 @@ public class Blessing {
         this.createdAt = createdAt;
     }
 
+    // Getters and Setters
     public Long getId() { return id; }
     public String getUserId() { return userId; }
     public String getName() { return name; }
