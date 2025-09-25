@@ -122,7 +122,12 @@ public class LineWebhookController {
                                 lineReplyService.replyWithQuickReply(replyToken, userId,
                                     "✅ 已清除所有包含『8888』的祝福留言 🧹");
                                 continue;
-                            case "清除牆 第1頁留言":
+                            case "清除總數留言":
+                                blessingService.deleteBlessingsByKeyword("總數");
+                                lineReplyService.replyWithQuickReply(replyToken, userId,
+                                    "✅ 已清除所有包含『總數』的祝福留言 🧹");
+                                continue;
+                            case "清除牆留言":
                                 blessingService.deleteBlessingsByKeyword("牆");
                                 lineReplyService.replyWithQuickReply(replyToken, userId,
                                     "✅ 已清除所有包含『牆』有關的祝福留言 🧹");
