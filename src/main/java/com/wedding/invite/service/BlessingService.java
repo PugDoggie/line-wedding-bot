@@ -7,6 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -49,9 +52,12 @@ public class BlessingService {
         }
     }
 
-    public List <Blessing> getBlessings() {
-        logger.info("📥 取得最新祝福留言");
-        return blessingRepository.findAllByOrderByCreatedAtDesc();
+    public List<Blessing> getBlessingsByPage(int page, int size) {
+        logger.info("📥 取得祝福留言分頁：page={}, size={}", page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        List<Blessing> blessings = blessingRepository.findAll(pageable).getContent();
+        logger.info("✅ 撈出祝福筆數：{}", blessings.size());
+        return blessings;
     }
 
     private String getDisplayName(String userId) {
@@ -85,5 +91,11 @@ public class BlessingService {
         String fallback = "匿名祝福者" + userId.substring(userId.length() - 4);
         logger.info("🕶 使用匿名名稱：{}", fallback);
         return fallback;
+    }
+
+    // ✅ 新增這段方法，讓 Controller 可以使用 getBlessings()
+    public List<Blessing> getBlessings() {
+        logger.info("📥 取得所有祝福留言");
+        return blessingRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
     }
 }

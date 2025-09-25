@@ -34,7 +34,7 @@ public class RichMenuController {
         }
     }
 
-    // ✅ 如果你未來想加上祝福牆測試或其他功能，可以在這裡擴充
+    // ✅ 額外測試端點：確認祝福牆留言是否正常儲存
     @GetMapping("/test-blessings")
     public String testBlessingAccess() {
         try {

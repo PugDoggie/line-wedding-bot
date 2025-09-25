@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository
 public interface BlessingRepository extends JpaRepository<Blessing, Long> {
-	List<Blessing> findAllByOrderByCreatedAtDesc();
+    List<Blessing> findTop20ByOrderByCreatedAtDesc(); // 可選：撈固定筆數
+    // 不需要加 getBlessingsByPage()
 }
