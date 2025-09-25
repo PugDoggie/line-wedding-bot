@@ -51,7 +51,7 @@ public class BlessingService {
 
     public List <Blessing> getBlessings() {
         logger.info("📥 取得最新祝福留言");
-        return blessingRepository.findTop20ByOrderByCreatedAtDesc();
+        return blessingRepository.findAllByOrderByCreatedAtDesc();
     }
 
     private String getDisplayName(String userId) {
