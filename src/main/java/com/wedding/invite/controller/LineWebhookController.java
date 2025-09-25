@@ -85,11 +85,17 @@ public class LineWebhookController {
                                 continue;
                             case "時間":
                                 lineReplyService.replyWithQuickReply(replyToken, userId,
-                                    "婚禮時間：2025年10月25日 \n中午12點入場 12點30開席 ⏰");
+                                    "📅 婚禮日期：2025年10月25日（星期六）\r\n"
+                                    + "⏰ 入場時間：中午 12:00\r\n"
+                                    + "🍽️ 開席時間：中午 12:30\r\n"
+                                    );
                                 continue;
                             case "報名":
                                 lineReplyService.replyWithQuickReply(replyToken, userId,
-                                    "報名連結：https://forms.gle/ZtYcJVXMaLq7tPXn9 📝\n請大家盡速填寫方便我們做統計呦!!");
+                                    "報名開放囉！📝\n"+
+                                    "👉 點我填寫報名表：https://forms.gle/ZtYcJVXMaLq7tPXn9\n\n" +
+                                    "為方便統計與安排，請大家儘早填寫，感謝您的配合 💖"
+                                    );
                                 continue;
                             case "祝福牆":
                                 var blessings = blessingService.getBlessings();
