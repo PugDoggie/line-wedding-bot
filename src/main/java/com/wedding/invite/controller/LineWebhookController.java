@@ -112,6 +112,21 @@ public class LineWebhookController {
                                 lineReplyService.replyWithQuickReply(replyToken, userId,
                                     "目前祝福牆共有 " + count + " 則留言 🎉\n快來留言祝福新人吧！");
                                 continue;
+                            case "清除測試留言":
+                                blessingService.deleteBlessingsByKeyword("測試");
+                                lineReplyService.replyWithQuickReply(replyToken, userId,
+                                    "✅ 已清除所有包含『測試』的祝福留言 🧹");
+                                continue;
+                            case "清除8888留言":
+                                blessingService.deleteBlessingsByKeyword("8888");
+                                lineReplyService.replyWithQuickReply(replyToken, userId,
+                                    "✅ 已清除所有包含『8888』的祝福留言 🧹");
+                                continue;
+                            case "清除牆 第1頁留言":
+                                blessingService.deleteBlessingsByKeyword("牆");
+                                lineReplyService.replyWithQuickReply(replyToken, userId,
+                                    "✅ 已清除所有包含『牆』有關的祝福留言 🧹");
+                                continue;
                             default:
                                 if (messageText.contains("祝福")) {
                                     String blessingMessage = messageText.replace("祝福:", "").replace("祝福", "").trim();
