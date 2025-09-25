@@ -120,7 +120,7 @@ public class LineWebhookController {
 
                     // ✅ 所有非文字訊息類型（貼圖、圖片、影片、語音、位置等）
                     lineReplyService.replyWithQuickReply(replyToken, userId,
-                        "歡迎來到我們的婚禮邀請頁面！請選擇您想查詢的項目 😊\n若您想留言祝福牆，請輸入：祝福:您的祝福內容\n例如：祝福:新婚快樂，永浴愛河 💖");
+                        "請選擇您想查詢的項目 😊\n若您想留言祝福牆，請輸入：祝福:您的祝福內容\n例如：祝福:新婚快樂，永浴愛河 💖");
 
                 } catch (Exception e) {
                     logger.error("處理 {} 類型訊息時發生錯誤：{}", messageType, e.getMessage(), e);
