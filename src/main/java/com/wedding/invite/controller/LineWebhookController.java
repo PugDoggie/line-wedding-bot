@@ -77,6 +77,21 @@ public class LineWebhookController {
                 try {
                     if ("text".equals(messageType) && messageText != null) {
                         messageText = messageText.trim();
+
+                        // ✅ 動態清除留言：支援「清除:關鍵字」與「清除：關鍵字」
+                        if (messageText.startsWith("清除:") || messageText.startsWith("清除：")) {
+                            String keyword = messageText.replace("清除:", "").replace("清除：", "").trim();
+                            if (!keyword.isEmpty()) {
+                                blessingService.deleteBlessingsByKeyword(keyword);
+                                lineReplyService.replyWithQuickReply(replyToken, userId,
+                                    "✅ 已清除所有包含『" + keyword + "』的祝福留言 🧹");
+                            } else {
+                                lineReplyService.replyWithQuickReply(replyToken, userId,
+                                    "請輸入有效的清除關鍵字，例如：清除:測試留言");
+                            }
+                            continue;
+                        }
+
                         switch (messageText) {
                             case "地點":
                                 lineReplyService.replyWithQuickReply(replyToken, userId,
@@ -112,39 +127,20 @@ public class LineWebhookController {
                                 lineReplyService.replyWithQuickReply(replyToken, userId,
                                     "目前祝福牆共有 " + count + " 則留言 🎉\n快來留言祝福新人吧！");
                                 continue;
-                            case "清除測試留言":
-                                blessingService.deleteBlessingsByKeyword("測試");
-                                lineReplyService.replyWithQuickReply(replyToken, userId,
-                                    "✅ 已清除所有包含『測試』的祝福留言 🧹");
-                                continue;
-                            case "清除8888留言":
-                                blessingService.deleteBlessingsByKeyword("8888");
-                                lineReplyService.replyWithQuickReply(replyToken, userId,
-                                    "✅ 已清除所有包含『8888』的祝福留言 🧹");
-                                continue;
-                            case "清除總數留言":
-                                blessingService.deleteBlessingsByKeyword("總數");
-                                lineReplyService.replyWithQuickReply(replyToken, userId,
-                                    "✅ 已清除所有包含『總數』的祝福留言 🧹");
-                                continue;
-                            case "清除牆留言":
-                                blessingService.deleteBlessingsByKeyword("牆");
-                                lineReplyService.replyWithQuickReply(replyToken, userId,
-                                    "✅ 已清除所有包含『牆』有關的祝福留言 🧹");
-                                continue;
-                            default:
-                                if (messageText.contains("祝福")) {
-                                    String blessingMessage = messageText.replace("祝福:", "").replace("祝福", "").trim();
-                                    logger.info("🎁 收到祝福留言：userId={}, message={}", userId, blessingMessage);
+                        }
 
-                                    if (!blessingMessage.isEmpty()) {
-                                        blessingService.saveBlessing(userId, blessingMessage);
-                                        lineReplyService.replyWithQuickReply(replyToken, userId, "感謝您的祝福 💖");
-                                    } else {
-                                        lineReplyService.replyWithQuickReply(replyToken, userId, "請輸入有效的祝福內容，例如：祝福:新婚快樂！");
-                                    }
-                                    continue;
-                                }
+                        // ✅ 儲存祝福留言
+                        if (messageText.contains("祝福")) {
+                            String blessingMessage = messageText.replace("祝福:", "").replace("祝福", "").trim();
+                            logger.info("🎁 收到祝福留言：userId={}, message={}", userId, blessingMessage);
+
+                            if (!blessingMessage.isEmpty()) {
+                                blessingService.saveBlessing(userId, blessingMessage);
+                                lineReplyService.replyWithQuickReply(replyToken, userId, "感謝您的祝福 💖");
+                            } else {
+                                lineReplyService.replyWithQuickReply(replyToken, userId, "請輸入有效的祝福內容，例如：祝福:新婚快樂！");
+                            }
+                            continue;
                         }
                     }
 
