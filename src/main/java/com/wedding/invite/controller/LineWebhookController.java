@@ -81,7 +81,7 @@ public class LineWebhookController {
                         switch (messageText) {
                             case "地點":
                                 lineReplyService.replyWithQuickReply(replyToken, userId,
-                                    "婚禮地點：彰化縣員林市員林大道一段298號 💒");
+                                    "婚禮地點：彰化縣員林市員林大道一段298號 💒\n👉 點我導航：https://maps.app.goo.gl/7asmcGXXye3Tkmv27?g_st=ipc");
                                 continue;
                             case "時間":
                                 lineReplyService.replyWithQuickReply(replyToken, userId,
