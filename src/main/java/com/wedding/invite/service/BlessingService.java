@@ -51,11 +51,21 @@ public class BlessingService {
                 .build();
 
             HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() != 200) {
+                logger.warn("LINE API 回傳非 200：{}", response.statusCode());
+                return fallbackName(userId);
+            }
+
             JSONObject json = new JSONObject(response.body());
             return json.getString("displayName");
         } catch (Exception e) {
-            logger.warn("取得使用者名稱失敗，使用匿名名稱：{}", e.getMessage());
-            return "匿名祝福者" + userId.substring(userId.length() - 4);
+            logger.error("取得使用者名稱失敗：{}", e.getMessage(), e);
+            return fallbackName(userId);
         }
+    }
+
+    private String fallbackName(String userId) {
+        return "匿名祝福者" + userId.substring(userId.length() - 4);
     }
 }
