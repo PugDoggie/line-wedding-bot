@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -98,9 +99,11 @@ public class BlessingService {
         logger.info("📥 取得所有祝福留言");
         return blessingRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
     }
+    @Transactional
     public void deleteBlessingsByKeyword(String keyword) {
         logger.warn("⚠️ 即將刪除所有包含『{}』的祝福留言", keyword);
         blessingRepository.deleteByMessageContaining(keyword);
         logger.info("🧹 已刪除所有包含『{}』的留言", keyword);
     }
+
 }
