@@ -5,7 +5,6 @@ import com.wedding.invite.repository.BlessingRepository;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -24,8 +23,11 @@ public class BlessingService {
     @Value("${line.channel.token}")
     private String channelAccessToken;
 
-    @Autowired
-    private BlessingRepository blessingRepository;
+    private final BlessingRepository blessingRepository;
+
+    public BlessingService(BlessingRepository blessingRepository) {
+        this.blessingRepository = blessingRepository;
+    }
 
     public void saveBlessing(String userId, String message) {
         logger.info("🔔 進入 saveBlessing()，userId={}, message={}", userId, message);
@@ -47,9 +49,9 @@ public class BlessingService {
         }
     }
 
-    public List<Blessing> getBlessings() {
+    public List <Blessing> getBlessings() {
         logger.info("📥 取得最新祝福留言");
-        return blessingRepository.findTop5ByOrderByCreatedAtDesc();
+        return blessingRepository.findTop20ByOrderByCreatedAtDesc();
     }
 
     private String getDisplayName(String userId) {

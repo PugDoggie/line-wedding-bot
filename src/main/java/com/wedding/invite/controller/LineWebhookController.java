@@ -111,18 +111,18 @@ public class LineWebhookController {
                                 }
                                 continue;
                             default:
-                                if (messageText.startsWith("祝福:")) {
-                                    String blessingMessage = messageText.substring(3).trim();
-                                    if (!blessingMessage.isEmpty()) {
-                                        blessingService.saveBlessing(userId, blessingMessage);
-                                        lineReplyService.replyWithQuickReply(replyToken, userId,
-                                            "感謝您的祝福！💖 您的留言已成功記錄。");
-                                    } else {
-                                        lineReplyService.replyWithQuickReply(replyToken, userId,
-                                            "請輸入有效的祝福內容，例如：祝福:新婚快樂！");
-                                    }
-                                    continue;
-                                }
+                            	if (messageText != null && messageText.contains("祝福")) {
+                            	    String blessingMessage = messageText.replace("祝福:", "").replace("祝福", "").trim();
+                            	    logger.info("🎁 收到祝福留言：userId={}, message={}", userId, blessingMessage);
+
+                            	    if (!blessingMessage.isEmpty()) {
+                            	        blessingService.saveBlessing(userId, blessingMessage);
+                            	        lineReplyService.replyWithQuickReply(replyToken, userId, "感謝您的祝福 💖");
+                            	    } else {
+                            	        lineReplyService.replyWithQuickReply(replyToken, userId, "請輸入有效的祝福內容，例如：祝福:新婚快樂！");
+                            	    }
+                            	    continue;
+                            	}
                         }
                     }
 

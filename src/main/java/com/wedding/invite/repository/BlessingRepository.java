@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface BlessingRepository extends JpaRepository<Blessing, Long> {
-    List<Blessing> findTop5ByOrderByCreatedAtDesc();
+	List<Blessing> findTop20ByOrderByCreatedAtDesc();
 }
