@@ -41,6 +41,13 @@
       <artifactId>jackson-databind</artifactId>
     </dependency>
 
+    <!-- org.json 處理 JSONObject -->
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>20230227</version>
+    </dependency>
+
     <!-- Spring Boot 測試 -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
