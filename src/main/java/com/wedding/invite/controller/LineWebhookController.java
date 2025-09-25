@@ -99,7 +99,9 @@ public class LineWebhookController {
                                 } else {
                                     lineReplyService.replyWithBlessingFlex(replyToken, userId, blessings);
                                     lineReplyService.pushQuickReply(userId,
-                                        "若您想留言祝福牆，請輸入：祝福:您想祝福的內容\n例如：祝福:新婚快樂，永浴愛河 💖");
+                                        "🎊 一起來留言祝福牆吧！\r\n"
+                                        + "請輸入格式：祝福: 您的祝福話語\r\n"
+                                        + "範例：祝福: 新婚快樂，百年好合 ");
                                 }
                                 continue;
                             default:
