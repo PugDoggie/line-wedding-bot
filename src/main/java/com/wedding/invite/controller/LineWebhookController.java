@@ -75,7 +75,6 @@ public class LineWebhookController {
 
             if (Objects.equals(eventType, "message")) {
                 try {
-                    // ✅ 處理文字訊息
                     if ("text".equals(messageType) && messageText != null) {
                         messageText = messageText.trim();
                         switch (messageText) {
@@ -87,15 +86,13 @@ public class LineWebhookController {
                                 lineReplyService.replyWithQuickReply(replyToken, userId,
                                     "📅 婚禮日期：2025年10月25日（星期六）\r\n"
                                     + "⏰ 入場時間：中午 12:00\r\n"
-                                    + "🍽️ 開席時間：中午 12:30\r\n"
-                                    );
+                                    + "🍽️ 開席時間：中午 12:30\r\n");
                                 continue;
                             case "報名":
                                 lineReplyService.replyWithQuickReply(replyToken, userId,
-                                    "報名開放囉！📝\n"+
-                                    "👉 點我填寫報名表：https://forms.gle/ZtYcJVXMaLq7tPXn9\n\n" +
-                                    "為方便統計與安排，請大家儘早填寫，感謝您的配合 💖"
-                                    );
+                                    "報名開放囉！📝\n"
+                                    + "👉 點我填寫報名表：https://forms.gle/ZtYcJVXMaLq7tPXn9\n\n"
+                                    + "為方便統計與安排，請大家儘早填寫，感謝您的配合 💖");
                                 continue;
                             case "祝福牆":
                                 var blessings = blessingService.getBlessings();
@@ -110,23 +107,28 @@ public class LineWebhookController {
                                         + "範例：祝福: 新婚快樂，百年好合 ");
                                 }
                                 continue;
+                            case "留言數量":
+                                int count = blessingService.getBlessings().size();
+                                lineReplyService.replyWithQuickReply(replyToken, userId,
+                                    "目前祝福牆共有 " + count + " 則留言 🎉\n快來留言祝福新人吧！");
+                                continue;
                             default:
-                            	if (messageText != null && messageText.contains("祝福")) {
-                            	    String blessingMessage = messageText.replace("祝福:", "").replace("祝福", "").trim();
-                            	    logger.info("🎁 收到祝福留言：userId={}, message={}", userId, blessingMessage);
+                                if (messageText.contains("祝福")) {
+                                    String blessingMessage = messageText.replace("祝福:", "").replace("祝福", "").trim();
+                                    logger.info("🎁 收到祝福留言：userId={}, message={}", userId, blessingMessage);
 
-                            	    if (!blessingMessage.isEmpty()) {
-                            	        blessingService.saveBlessing(userId, blessingMessage);
-                            	        lineReplyService.replyWithQuickReply(replyToken, userId, "感謝您的祝福 💖");
-                            	    } else {
-                            	        lineReplyService.replyWithQuickReply(replyToken, userId, "請輸入有效的祝福內容，例如：祝福:新婚快樂！");
-                            	    }
-                            	    continue;
-                            	}
+                                    if (!blessingMessage.isEmpty()) {
+                                        blessingService.saveBlessing(userId, blessingMessage);
+                                        lineReplyService.replyWithQuickReply(replyToken, userId, "感謝您的祝福 💖");
+                                    } else {
+                                        lineReplyService.replyWithQuickReply(replyToken, userId, "請輸入有效的祝福內容，例如：祝福:新婚快樂！");
+                                    }
+                                    continue;
+                                }
                         }
                     }
 
-                    // ✅ 所有非文字訊息類型（貼圖、圖片、影片、語音、位置等）
+                    // ✅ 非文字訊息類型
                     lineReplyService.replyWithQuickReply(replyToken, userId,
                         "請選擇您想查詢的項目 😊\n若您想留言祝福牆，請輸入：祝福:您的祝福內容\n例如：祝福:新婚快樂，永浴愛河 💖");
 
